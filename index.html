@@ -3,44 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>환영합니다</title>
+    <title>VoiMeow - 행복한 고양이와 함께하는 음성 앱</title>
+    <meta name="description" content="VoiMeow - 고양이와 함께하는 행복한 삶을 위한 음성 앱. 실시간 건강 리포트, 커뮤니티, AI 챗봇 상담.">
+    <meta name="theme-color" content="#e8b4b8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="navigation">
-            <span class="logo">바이브코딩</span>
-            <ul class="menu-list">
-                <li><a href="#home">홈</a></li>
-                <li><a href="#about">소개</a></li>
-                <li><a href="#contact">연락</a></li>
-            </ul>
+    <!-- 행복한 고양이 배경 슬라이드 -->
+    <div class="cat-background" aria-hidden="true">
+        <div class="cat-slide cat-slide-active" data-slide-index="0"></div>
+        <div class="cat-slide" data-slide-index="1"></div>
+        <div class="cat-slide" data-slide-index="2"></div>
+        <div class="cat-slide" data-slide-index="3"></div>
+        <div class="cat-slide" data-slide-index="4"></div>
+        <div class="cat-slide" data-slide-index="5"></div>
+    </div>
+
+    <div class="page-overlay"></div>
+
+    <!-- 고정 헤더 -->
+    <header class="site-header">
+        <div class="header-top-row">
+            <a href="#" class="logo-link" data-page="home" aria-label="VoiMeow 홈으로">
+                <h1 class="logo-text">VoiMeow</h1>
+            </a>
+            <div class="header-right">
+                <div class="header-search-wrapper">
+                    <label for="site-search-input" class="visually-hidden">사이트 검색</label>
+                    <input type="search" id="site-search-input" class="header-search-input" placeholder="검색..." autocomplete="off" aria-label="사이트 검색">
+                    <button type="button" class="header-search-btn" aria-label="검색 실행">
+                        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </button>
+                </div>
+                <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+        <nav class="main-navigation" id="mainNavigation">
+            <a href="#company" class="nav-link" data-page="company">회사소개</a>
+            <a href="#notice" class="nav-link" data-page="notice">공지사항</a>
+            <a href="#usage" class="nav-link" data-page="usage">사용방법</a>
+            <a href="#community" class="nav-link" data-page="community">커뮤니티</a>
+            <a href="#event" class="nav-link" data-page="event">이벤트</a>
+            <a href="#support" class="nav-link" data-page="support">고객센터</a>
+            <a href="#login" class="nav-link nav-link-accent nav-login-link" data-page="login">로그인/회원가입</a>
+            <div class="nav-logged-in" style="display: none;">
+                <a href="#" class="nav-link" data-page="mypage">마이페이지</a>
+                <a href="#" class="nav-link nav-link-accent nav-logout-link" data-page="logout">로그아웃</a>
+            </div>
         </nav>
     </header>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 
-    <main>
-        <section id="home" class="hero-section">
-            <h1 class="hero-title">안녕하세요!</h1>
-            <p class="hero-description">간단하고 아름다운 웹사이트에 오신 것을 환영합니다.</p>
-            <button class="cta-button" id="greetingButton">인사하기</button>
-            <p class="greeting-message" id="greetingMessage"></p>
+    <main class="main-content">
+        <!-- 홈 (기본) -->
+        <section id="page-home" class="page-section page-active">
+            <div class="hero-section">
+                <p class="hero-tagline">행복한 고양이와 함께하는 특별한 음성 경험</p>
+                <div class="store-buttons">
+                    <a href="#" class="store-button store-button-apple" target="_blank" rel="noopener noreferrer" aria-label="애플 앱스토어에서 다운로드">
+                        <svg class="store-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        <span class="store-label">App Store</span>
+                    </a>
+                    <a href="#" class="store-button store-button-google" target="_blank" rel="noopener noreferrer" aria-label="구글 플레이에서 다운로드">
+                        <svg class="store-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
+                        <span class="store-label">Google Play</span>
+                    </a>
+                </div>
+            </div>
         </section>
 
-        <section id="about" class="about-section">
-            <h2>소개</h2>
-            <p>이 웹사이트는 HTML, CSS, JavaScript로 만들어졌습니다. 버튼을 눌러보세요!</p>
+        <!-- 회사소개 -->
+        <section id="page-company" class="page-section">
+            <div class="company-intro">
+                <h2 class="company-title">고양이와 함께하는 행복한 삶</h2>
+                <p class="company-slogan">VoiMeow와 함께 하세요.</p>
+                <p class="company-message">너와 함께 있어 행복해.</p>
+                <div class="company-logo-blink">
+                    <span class="logo-blink-text">VoiMeow</span>
+                </div>
+            </div>
         </section>
 
-        <section id="contact" class="contact-section">
-            <h2>연락처</h2>
-            <p>궁금한 점이 있으시면 언제든 연락해 주세요.</p>
+        <!-- 로그인 -->
+        <section id="page-login" class="page-section">
+            <div class="login-form-wrapper">
+                <h2 class="login-title">로그인</h2>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="login-id">ID</label>
+                        <input type="text" id="login-id" name="userId" placeholder="ID 입력" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" placeholder="비밀번호 입력" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="login-submit-btn">로그인</button>
+                </form>
+            </div>
         </section>
+
+        <!-- 로그인 후 (마이페이지 + 사이드바) -->
+        <section id="page-logged-in" class="page-section page-with-sidebar">
+            <aside class="user-sidebar">
+                <h3 class="sidebar-title">메뉴</h3>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="sidebar-link" data-sidebar="subscription">구독서비스관리</a></li>
+                    <li><a href="#" class="sidebar-link" data-sidebar="cat-management">고양이관리</a></li>
+                    <li><a href="#" class="sidebar-link" data-sidebar="realtime-report">실시간리포트</a></li>
+                    <li><a href="#" class="sidebar-link" data-sidebar="family-setting">가족연결설정</a></li>
+                    <li><a href="#" class="sidebar-link" data-sidebar="my-posts">내가쓴글</a></li>
+                </ul>
+            </aside>
+            <div class="user-main-content">
+                <h2 class="user-welcome">VoiMeow와 함께 행복한 묘생.</h2>
+
+                <!-- 구독서비스관리 -->
+                <div id="mypage-subscription" class="mypage-panel">
+                    <div class="subscription-card">
+                        <div class="subscription-header">
+                            <span class="subscription-price">4,900원</span>
+                            <span class="subscription-extra">+ 추가고양이당 1,000원</span>
+                            <div class="subscription-menu-wrapper">
+                                <button type="button" class="subscription-menu-btn" aria-label="구독서비스 변경">⋯</button>
+                                <div class="subscription-dropdown" style="display: none;">
+                                    <button type="button" class="subscription-dropdown-item" data-action="cancel">취소</button>
+                                    <button type="button" class="subscription-dropdown-item" data-action="change">+변경</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="subscription-cats">
+                            <span class="subscription-cat-count">고양이 <strong id="subscription-cat-count">1</strong>마리</span>
+                            <button type="button" class="subscription-add-cat-btn" id="subscription-add-cat">+</button>
+                        </div>
+                        <p class="subscription-total">총 <strong id="subscription-total-price">5,900</strong>원/월</p>
+                    </div>
+                </div>
+
+                <!-- 고양이관리 -->
+                <div id="mypage-cat-management" class="mypage-panel">
+                    <div id="cat-cards-container" class="cat-cards-container">
+                        <div class="cat-card">
+                            <div class="cat-card-photo" title="클릭하면 폴더에서 사진을 선택할 수 있습니다">
+                                <img src="https://placekitten.com/120/120" alt="고양이 사진" class="cat-photo-img">
+                                <input type="file" class="cat-photo-input" accept="image/*" style="display: none;">
+                            </div>
+                            <input type="text" class="cat-name-input" placeholder="이름" value="">
+                        </div>
+                    </div>
+                    <button type="button" class="cat-add-btn" id="cat-add-btn">+</button>
+                </div>
+
+                <!-- 실시간리포트 -->
+                <div id="mypage-realtime-report" class="mypage-panel">
+                    <div class="report-graphs">
+                        <div class="report-graph-item">
+                            <span class="report-graph-label">활동량</span>
+                            <div class="report-graph-bar-wrap"><div class="report-graph-bar" data-value="75" style="width: 75%"></div></div>
+                        </div>
+                        <div class="report-graph-item">
+                            <span class="report-graph-label">식사량</span>
+                            <div class="report-graph-bar-wrap"><div class="report-graph-bar" data-value="90" style="width: 90%"></div></div>
+                        </div>
+                        <div class="report-graph-item">
+                            <span class="report-graph-label">배변량</span>
+                            <div class="report-graph-bar-wrap"><div class="report-graph-bar" data-value="60" style="width: 60%"></div></div>
+                        </div>
+                        <div class="report-graph-item">
+                            <span class="report-graph-label">기침</span>
+                            <div class="report-graph-bar-wrap"><div class="report-graph-bar" data-value="10" style="width: 10%"></div></div>
+                        </div>
+                        <div class="report-graph-item">
+                            <span class="report-graph-label">구토정도</span>
+                            <div class="report-graph-bar-wrap"><div class="report-graph-bar" data-value="5" style="width: 5%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 가족연결설정 -->
+                <div id="mypage-family-setting" class="mypage-panel">
+                    <div id="family-dashboards" class="family-dashboards">
+                        <div class="family-dashboard-item">
+                            <label class="family-dashboard-label">고객ID</label>
+                            <input type="text" class="family-id-input" placeholder="ID 입력 후 Enter">
+                            <div class="family-verify-area" style="display: none;">
+                                <p class="family-verify-msg">인증번호전송됩니다</p>
+                                <input type="text" class="family-verify-input" placeholder="인증번호 입력" maxlength="6">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="family-add-btn" id="family-add-btn">+</button>
+                </div>
+
+                <!-- 내가쓴글 -->
+                <div id="mypage-my-posts" class="mypage-panel">
+                    <h3 class="mypage-section-title">내가 쓴 글</h3>
+                    <div class="my-posts-tabs">
+                        <button type="button" class="my-posts-tab active" data-post-type="community">커뮤니티</button>
+                        <button type="button" class="my-posts-tab" data-post-type="support">고객센터</button>
+                    </div>
+                    
+                    <!-- 커뮤니티 글 목록 -->
+                    <div id="my-community-posts" class="my-posts-list my-posts-list-active">
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">우리 고양이 첫 목욕 성공 후기</span>
+                                <span class="my-post-date">2025-02-25</span>
+                            </div>
+                            <p class="my-post-preview">오늘 드디어 우리 냥이 첫 목욕을 시켰어요! 처음에는 저항이 심했지만...</p>
+                            <div class="my-post-stats">
+                                <span class="my-post-stat">👁️ 조회 125</span>
+                                <span class="my-post-stat">💬 댓글 8</span>
+                                <span class="my-post-stat">❤️ 좋아요 23</span>
+                            </div>
+                        </div>
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">고양이 사료 추천 부탁드려요</span>
+                                <span class="my-post-date">2025-02-20</span>
+                            </div>
+                            <p class="my-post-preview">5살 먹은 페르시안 고양이인데 요즘 사료를 잘 안 먹네요...</p>
+                            <div class="my-post-stats">
+                                <span class="my-post-stat">👁️ 조회 89</span>
+                                <span class="my-post-stat">💬 댓글 15</span>
+                                <span class="my-post-stat">❤️ 좋아요 12</span>
+                            </div>
+                        </div>
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">VoiMeow 목걸이 후기 공유합니다</span>
+                                <span class="my-post-date">2025-02-15</span>
+                            </div>
+                            <p class="my-post-preview">한 달 정도 사용해본 결과 정말 만족스러워요. 고양이 울음소리도 잘 잡아내고...</p>
+                            <div class="my-post-stats">
+                                <span class="my-post-stat">👁️ 조회 256</span>
+                                <span class="my-post-stat">💬 댓글 32</span>
+                                <span class="my-post-stat">❤️ 좋아요 67</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 고객센터 글 목록 -->
+                    <div id="my-support-posts" class="my-posts-list">
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">목걸이 충전 문제 문의</span>
+                                <span class="my-post-date">2025-02-24</span>
+                            </div>
+                            <p class="my-post-preview">목걸이가 충전이 안 되는 것 같아서 문의드립니다...</p>
+                            <div class="my-post-status">
+                                <span class="status-badge status-answered">답변완료</span>
+                            </div>
+                        </div>
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">가족 연결 설정 방법 문의</span>
+                                <span class="my-post-date">2025-02-18</span>
+                            </div>
+                            <p class="my-post-preview">가족 계정을 연결하려고 하는데 인증번호가 안 와요...</p>
+                            <div class="my-post-status">
+                                <span class="status-badge status-answered">답변완료</span>
+                            </div>
+                        </div>
+                        <div class="my-post-item">
+                            <div class="my-post-header">
+                                <span class="my-post-title">구독 요금제 변경 문의</span>
+                                <span class="my-post-date">2025-02-10</span>
+                            </div>
+                            <p class="my-post-preview">고양이를 한 마리 더 키우게 되어서 요금제 변경하고 싶습니다...</p>
+                            <div class="my-post-status">
+                                <span class="status-badge status-answered">답변완료</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사용방법 -->
+        <section id="page-usage" class="page-section">
+            <div class="usage-content">
+                <h2 class="usage-title">사용방법</h2>
+                <ol class="usage-steps">
+                    <li class="usage-step">
+                        <span class="usage-step-number">1</span>
+                        <span class="usage-step-text">어플리케이션 설치하고</span>
+                    </li>
+                    <li class="usage-step">
+                        <span class="usage-step-number">2</span>
+                        <span class="usage-step-text">로그인하고</span>
+                    </li>
+                    <li class="usage-step">
+                        <span class="usage-step-number">3</span>
+                        <span class="usage-step-text">고양이설정에서 이름 적고</span>
+                    </li>
+                    <li class="usage-step">
+                        <span class="usage-step-number">4</span>
+                        <span class="usage-step-text">카메라로 고양이 찍거나 목걸이 색상 결정하고</span>
+                    </li>
+                    <li class="usage-step">
+                        <span class="usage-step-number">5</span>
+                        <span class="usage-step-text">확인하기</span>
+                    </li>
+                </ol>
+                <!-- 실제 동영상 URL: YouTube 등에서 embed 주소로 교체 (예: https://www.youtube.com/embed/영상ID) -->
+                <div class="usage-video-wrapper">
+                    <div class="usage-video-placeholder">
+                        <p>동영상 영역</p>
+                        <p class="usage-video-hint">어플 설치 → 로그인 → 고양이설정(이름/카메라/목걸이색상) → 확인하기</p>
+                        <p class="usage-video-hint">실제 동영상이 있으면 위 영역을 iframe으로 교체해주세요</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 커뮤니티 -->
+        <section id="page-community" class="page-section page-community">
+            <div class="community-layout">
+                <aside class="community-sidebar">
+                    <div class="community-category">
+                        <h3 class="category-title">묘종별</h3>
+                        <div class="category-slider">
+                            <button type="button" class="slider-btn slider-prev" aria-label="이전">‹</button>
+                            <div class="slider-items" data-category="breed">
+                                <span class="slider-item active" data-value="a">A</span>
+                                <span class="slider-item" data-value="b">B</span>
+                                <span class="slider-item" data-value="c">C</span>
+                                <span class="slider-item" data-value="d">D</span>
+                                <span class="slider-item" data-value="e">E</span>
+                                <span class="slider-item" data-value="f">F</span>
+                                <span class="slider-item" data-value="g">G</span>
+                                <span class="slider-item" data-value="h">H</span>
+                            </div>
+                            <button type="button" class="slider-btn slider-next" aria-label="다음">›</button>
+                        </div>
+                    </div>
+                    <div class="community-category">
+                        <h3 class="category-title">연령별</h3>
+                        <div class="category-slider">
+                            <button type="button" class="slider-btn slider-prev" aria-label="이전">‹</button>
+                            <div class="slider-items" data-category="age">
+                                <span class="slider-item active" data-value="under1">1년미만</span>
+                                <span class="slider-item" data-value="over9">9세이상</span>
+                            </div>
+                            <button type="button" class="slider-btn slider-next" aria-label="다음">›</button>
+                        </div>
+                    </div>
+                    <div class="community-category">
+                        <h3 class="category-title">질병별</h3>
+                        <div class="category-slider">
+                            <button type="button" class="slider-btn slider-prev" aria-label="이전">‹</button>
+                            <div class="slider-items" data-category="disease">
+                                <span class="slider-item active" data-value="neutering">중성화</span>
+                                <span class="slider-item" data-value="conjunctivitis">결막염</span>
+                                <span class="slider-item" data-value="cystitis">방광염</span>
+                                <span class="slider-item" data-value="arthritis">관절염</span>
+                                <span class="slider-item" data-value="heart">심장</span>
+                            </div>
+                            <button type="button" class="slider-btn slider-next" aria-label="다음">›</button>
+                        </div>
+                    </div>
+                    <div class="community-category">
+                        <h3 class="category-title">아나바다</h3>
+                        <div class="category-slider">
+                            <button type="button" class="slider-btn slider-prev" aria-label="이전">‹</button>
+                            <div class="slider-items" data-category="etc1">
+                                <span class="slider-item active" data-value="exchange">교환하기</span>
+                                <span class="slider-item" data-value="sell">판매하기</span>
+                            </div>
+                            <button type="button" class="slider-btn slider-next" aria-label="다음">›</button>
+                        </div>
+                    </div>
+                    <div class="community-category">
+                        <h3 class="category-title">신청</h3>
+                        <div class="category-slider">
+                            <button type="button" class="slider-btn slider-prev" aria-label="이전">‹</button>
+                            <div class="slider-items" data-category="etc2">
+                                <span class="slider-item active" data-value="experience">체험단</span>
+                                <span class="slider-item" data-value="review">후기</span>
+                            </div>
+                            <button type="button" class="slider-btn slider-next" aria-label="다음">›</button>
+                        </div>
+                    </div>
+                </aside>
+                <div class="community-main">
+                    <div class="community-toolbar">
+                        <div class="view-mode-toggle">
+                            <button type="button" class="view-mode-btn active" data-mode="card">큰그림</button>
+                            <button type="button" class="view-mode-btn" data-mode="list">글씨만</button>
+                        </div>
+                        <div class="community-search">
+                            <select id="community-search-type" class="search-type-select">
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="author">작성자</option>
+                            </select>
+                            <input type="text" id="community-search-input" class="community-search-input" placeholder="검색어 입력">
+                            <button type="button" class="community-search-btn">검색</button>
+                        </div>
+                    </div>
+                    <div class="community-write-area">
+                        <textarea id="community-write-input" class="community-write-input" placeholder="글을 작성해주세요..." rows="3"></textarea>
+                        <button type="button" class="community-write-btn">글쓰기</button>
+                    </div>
+                    <div id="community-posts" class="community-posts community-posts-card">
+                        <!-- 20개 글 목록 JS로 렌더 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 공지사항, 이벤트 -->
+        <section id="page-notice" class="page-section"><div class="placeholder-content"><h2>공지사항</h2><p>준비 중입니다.</p></div></section>
+        <section id="page-event" class="page-section"><div class="placeholder-content"><h2>이벤트</h2><p>준비 중입니다.</p></div></section>
+
+        <!-- 고객센터 -->
+        <section id="page-support" class="page-section page-support">
+            <div class="support-layout">
+                <aside class="support-sidebar">
+                    <h3 class="support-sidebar-title">고객센터</h3>
+                    <nav class="support-nav">
+                        <button type="button" class="support-nav-item active" data-support="faq">자주질문</button>
+                        <button type="button" class="support-nav-item" data-support="inquiry">1대1질문하기</button>
+                        <button type="button" class="support-nav-item" data-support="chatbot">챗봇연결하기</button>
+                        <button type="button" class="support-nav-item" data-support="remote">원격서비스</button>
+                        <button type="button" class="support-nav-item" data-support="phone">전화고객센터</button>
+                    </nav>
+                </aside>
+                <div class="support-main">
+                    <!-- 자주질문 -->
+                    <div id="support-faq" class="support-panel support-panel-active">
+                        <h2 class="support-panel-title">자주 묻는 질문</h2>
+                        <div class="faq-board">
+                            <button type="button" class="faq-item" data-faq="install">설치하는방법</button>
+                            <button type="button" class="faq-item" data-faq="install-error">설치에러날때</button>
+                            <button type="button" class="faq-item" data-faq="cat-setting">고양이설정하는방법</button>
+                            <button type="button" class="faq-item" data-faq="subscription">구독서비스관리방법</button>
+                        </div>
+                        <div class="faq-search-area">
+                            <input type="search" id="faq-search-input" class="faq-search-input" placeholder="검색하기">
+                            <button type="button" class="faq-search-btn">검색</button>
+                        </div>
+                    </div>
+                    <!-- 1대1질문하기 -->
+                    <div id="support-inquiry" class="support-panel">
+                        <h2 class="support-panel-title">1대1 질문하기</h2>
+                        <div class="inquiry-dashboard">
+                            <div id="inquiry-posts" class="inquiry-posts"></div>
+                            <div class="inquiry-write-area">
+                                <button type="button" class="inquiry-write-trigger">글쓰기</button>
+                            </div>
+                        </div>
+                        <div id="inquiry-form-modal" class="inquiry-form-wrapper" style="display: none;">
+                            <form id="inquiry-form" class="inquiry-form">
+                                <h3>1대1 문의 작성</h3>
+                                <div class="form-group">
+                                    <label for="inquiry-title">제목</label>
+                                    <input type="text" id="inquiry-title" placeholder="제목을 입력하세요" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inquiry-content">내용</label>
+                                    <textarea id="inquiry-content" rows="5" placeholder="내용을 입력하세요" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inquiry-password">패스워드</label>
+                                    <input type="password" id="inquiry-password" placeholder="패스워드 입력" required>
+                                </div>
+                                <div class="inquiry-form-actions">
+                                    <button type="submit" class="inquiry-submit-btn">등록</button>
+                                    <button type="button" class="inquiry-cancel-btn">취소</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 챗봇연결하기 -->
+                    <div id="support-chatbot" class="support-panel">
+                        <h2 class="support-panel-title">챗봇 연결하기</h2>
+                        <div class="chatbot-container">
+                            <div class="chatbot-header">
+                                VoiMeow AI 상담원 🐱
+                            </div>
+                            <div id="chatbotMessages" class="chatbot-messages">
+                            </div>
+                            <div class="chatbot-input-area">
+                                <textarea 
+                                    id="chatbotUserInput" 
+                                    class="chatbot-textarea" 
+                                    placeholder="메시지를 입력하세요..."
+                                    rows="1"
+                                ></textarea>
+                                <button id="chatbotSendButton" class="chatbot-send-button">전송</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 원격서비스 -->
+                    <div id="support-remote" class="support-panel">
+                        <h2 class="support-panel-title">원격서비스</h2>
+                        <button type="button" class="remote-trigger-btn">원격지원 연결하기</button>
+                    </div>
+                    <!-- 전화고객센터 -->
+                    <div id="support-phone" class="support-panel">
+                        <h2 class="support-panel-title">전화 고객센터</h2>
+                        <p class="support-phone-number">053-123-4567</p>
+                        <p class="support-phone-hint">평일 09:00 ~ 18:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 원격서비스 모달 -->
+        <div id="remote-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3 class="modal-title">원격지원 연결</h3>
+                <div class="remote-modal-body">
+                    <div class="form-group">
+                        <label for="remote-id">원격번호</label>
+                        <input type="text" id="remote-id" placeholder="원격번호 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="remote-password">패스워드</label>
+                        <input type="password" id="remote-password" placeholder="패스워드 입력">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-close-btn">닫기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 플로팅 챗봇 위젯 -->
+        <div id="floating-chatbot" class="floating-chatbot-widget" style="display: none;">
+            <div class="floating-chatbot-header">
+                <span class="floating-chatbot-title">🐱 VoiMeow AI 상담원</span>
+                <div class="floating-chatbot-controls">
+                    <button type="button" class="floating-chatbot-minimize" aria-label="최소화">−</button>
+                    <button type="button" class="floating-chatbot-close" aria-label="닫기">✕</button>
+                </div>
+            </div>
+            <div class="floating-chatbot-body">
+                <div id="floatingChatbotMessages" class="floating-chatbot-messages"></div>
+                <div class="floating-chatbot-input-area">
+                    <textarea 
+                        id="floatingChatbotInput" 
+                        class="floating-chatbot-textarea" 
+                        placeholder="메시지를 입력하세요..."
+                        rows="1"
+                    ></textarea>
+                    <button id="floatingChatbotSendButton" class="floating-chatbot-send-button">전송</button>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2025 바이브코딩. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section footer-address">
+                <h3 class="footer-heading">주소</h3>
+                <p>서울특별시 강남구 테헤란로 123</p>
+                <p>VoiMeow 빌딩 5층</p>
+            </div>
+            <div class="footer-section footer-contact">
+                <h3 class="footer-heading">연락처</h3>
+                <p>대표전화: 02-1234-5678</p>
+                <p>이메일: hello@voimeow.co.kr</p>
+            </div>
+            <div class="footer-section footer-services">
+                <div class="service-trigger-wrapper" tabindex="0">
+                    <h3 class="footer-heading service-trigger">서비스</h3>
+                    <div class="service-dropdown">
+                        <button type="button" class="footer-service-btn" data-service="chatbot">챗봇</button>
+                        <button type="button" class="footer-service-btn" data-service="remote">원격지원</button>
+                        <button type="button" class="footer-service-btn" data-service="partnership">파트너쉽</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 VoiMeow. All rights reserved.</p>
+        </div>
     </footer>
 
     <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+    <script src="floating-chatbot.js"></script>
+    <script src="admin-comments.js"></script>
 </body>
 </html>
